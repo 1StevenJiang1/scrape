@@ -9,7 +9,7 @@ import html_functions
 
 if __name__ == '__main__':
     search_query = ''
-    url = f'https://www.journals.uchicago.edu/doi/10.1086/219693{search_query}'
+    url = 'https://www.jstor.org/action/doBasicSearch?Query=sociology'
     try:
         response = requests.get(url)
     except:

@@ -1,1 +1,5 @@
-<div class="main-wrapper" role="main"><div class="main-content"><noscript><div id="challenge-error-title"><div class="h2"><span class="icon-wrapper"><div class="heading-icon warning-icon"></div></span><span id="challenge-error-text">Enable JavaScript and cookies to continue</span></div></div></noscript></div></div>
+<div class="logo-container">
+<a href="/">
+<img alt="JSTOR Home" class="non-responsive" height="90" src="/assets/global_20171026T1134/build/images/jstor-logo.png" srcset="/assets/global_20171026T1134/build/images/jstor-logo.png" width="65"/>
+</a>
+</div>
