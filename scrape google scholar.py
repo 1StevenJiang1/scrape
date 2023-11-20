@@ -1,5 +1,7 @@
 import collections
+import ssl
 import sys
+import urllib
 
 import requests
 collections.Callable = collections.abc.Callable
@@ -8,40 +10,14 @@ import html_functions
 
 
 if __name__ == '__main__':
-    search_query = ''
-    url = 'https://www.jstor.org/action/doBasicSearch?Query=sociology'
-    try:
-        response = requests.get(url)
-    except:
-        print('connection failed')
-        sys.exit()
-    soup = BeautifulSoup(response.content, 'html.parser')
-    with open('scrape_result_raw.txt', 'w') as f:
-        sib1 = soup.div
-        print(type(sib1))
-        content = soup.prettify()
-        f.write(str(sib1))
-    paper_results = soup.find_all('div', class_='gs_r gs_or gs_scl')
-    for i in range(len(paper_results)):
-        paper_results[i] = paper_results[i].prettify()
-    with open('find_all.txt', 'w', encoding='utf-8') as f:
-        for result in paper_results:
-            f.write(f'{result}\n')
-    paper_results = soup.stripped_strings
-    with open('content_result.txt', 'w', encoding='utf-8') as f:
-        for result in paper_results:
-            f.write(f'{result}\n')
-    a = 1
-    # with open('scrape_result.txt', 'w', encoding='utf-8') as txtfile:
-    #     for result in paper_results:
-    #         title = result.find('h3', class_='gs_rt').text
-    #         authors = result.find('div', class_='gs_a').text
-    #         abstract = result.find('div', class_='gs_rs').text
-    #
-    #         # Write the scraped data into the text file
-    #         txtfile.write(f'Title: {title}\n')
-    #         txtfile.write(f'Authors: {authors}\n')
-    #         txtfile.write(f'Abstract: {abstract}\n')
-    #         txtfile.write('\n')
+    context = ssl._create_unverified_context()
 
+    with urllib.request.urlopen('https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=black+cultural+capital&oq=', context=context) as response:
+        # Read the response content
+        html_content = response.read()
+    soup = BeautifulSoup(html_content, 'html.parser')
 
+    # You can now work with the parsed HTML using BeautifulSoup
+    # For example, you can extract data or find specific elements
+    title = soup.title
+    print("Title:", title.text)

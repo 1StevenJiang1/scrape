@@ -31,6 +31,8 @@ if __name__ == '__main__':
     pw.send_keys("Qwe731970830")
     uoft_login_button = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[@class='container']/div[@class='row']/div[@class='col-md-4']/div[@class='login-box']/form/button[@class='btn btn-primary btn-lg']")))
     uoft_login_button.click()
+    while True:
+        time.sleep(1)
 
     duo_frame = wait.until(EC.visibility_of_element_located((By.ID, 'duo_iframe')))
     driver.switch_to.frame(duo_frame)  # Switching to iframe by ID
