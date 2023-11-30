@@ -5,17 +5,20 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 
 import time
 
 if __name__ == '__main__':
     # Set options for headless browsing (if desired)
     chrome_options = Options()
+    chrome_options.add_experimental_option("useAutomationExtension", False)
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+
     # chrome_options.add_argument('--headless')
 
     # Create a Chrome WebDriver with the specified options and executable path
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    driver = webdriver.Chrome(options=chrome_options)
     wait = WebDriverWait(driver, 60)
 
     # Navigate to the JSTOR website and perform the login

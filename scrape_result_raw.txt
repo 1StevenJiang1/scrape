@@ -1,5 +1,0 @@
-<div class="logo-container">
-<a href="/">
-<img alt="JSTOR Home" class="non-responsive" height="90" src="/assets/global_20171026T1134/build/images/jstor-logo.png" srcset="/assets/global_20171026T1134/build/images/jstor-logo.png" width="65"/>
-</a>
-</div>
