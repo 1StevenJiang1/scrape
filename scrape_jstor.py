@@ -1,3 +1,4 @@
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     chrome_options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
 
     # allow for automatic downloads
-    dl_path = 'C:\\Users\\yichj\\Desktop\\jstor_downloads'
+    dl_path = r'C:\Users\yichj\Desktop\jstor_downloads'
     chrome_options.add_experimental_option('prefs', {
         "download.default_directory": dl_path,  # Change default directory for downloads
         "download.prompt_for_download": False,  # To auto download the file
@@ -28,7 +29,7 @@ if __name__ == '__main__':
 
     # Create a Chrome WebDriver with the specified options and executable path
     driver = webdriver.Chrome(options=chrome_options)
-    wait = WebDriverWait(driver, 60)
+    wait = WebDriverWait(driver, 600)
 
     # Navigate to the JSTOR website and perform the login
     driver.get('https://www-jstor-org.myaccess.library.utoronto.ca/action/doBasicSearch?Query=sociology')
@@ -53,16 +54,22 @@ if __name__ == '__main__':
     duo_buttons[0].click()
     driver.switch_to.default_content()
 
-    # begin downloading by clicking the download button on the jstor page
-    download_button = wait.until(EC.visibility_of_element_located((By.XPATH, "/html[@class='no-js']/body/main[@id='content']/div[@class='main-content-without-margin']/div[@id='search-results-vue-mount']/div/div[@class='search-results-area']/div[3]/div[@class='search-results-layout']/div[@class='search-results-layout__content']/ol[@class='search-results-layout__content__list']/li/div/div/div[@class='text-results']/ol[@class='result-list']/li[@class='result-list__item'][1]/div[@class='result']/div[@class='result__action-buttons']/ul[@class='action-buttons action-buttons--grouped']/li[@class='action-buttons__button search-result-action-button--download']/div/div/mfe-download-pharos-button")))
-    download_button.click()
-    time.sleep(5)
+    # Now begin downloading the first three pages
+    i = 0
+    while i < 3:
 
-    # proceed to downloading in the new window opened
-    # new_window = driver.window_handles[-1]
-    # driver.switch_to.window(new_window)
-    # pdf_link = driver.find_element(By.XPATH, '//your/xpath/for/pdf/link')
-    # pdf_link.click()
+        # identify all the download buttons
+        download_buttons = wait.until(EC.visibility_of_all_elements_located((By.XPATH, "/html[@class='no-js']/body/main[@id='content']/div[@class='main-content-without-margin']/div[@id='search-results-vue-mount']/div/div[@class='search-results-area']/div[3]/div[@class='search-results-layout']/div[@class='search-results-layout__content']/ol[@class='search-results-layout__content__list']/li/div/div/div[@class='text-results']/ol[@class='result-list']/li[@class='result-list__item'][1]/div[@class='result']/div[@class='result__action-buttons']/ul[@class='action-buttons action-buttons--grouped']/li[@class='action-buttons__button search-result-action-button--download']/div/div/mfe-download-pharos-button")))
+        for button in download_buttons:
+            button.click()
+            # proceed to downloading in the new window opened
+            new_window = driver.window_handles[-1]
+            driver.switch_to.window(new_window)
+            driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + 's')
+            time.sleep(5)
+        i += 1
+
+
 
     time.sleep(120)
     exit(1)
