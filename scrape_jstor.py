@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 # from webdriver_manager.chrome import ChromeDriverManager
 
+
 import time
 
 if __name__ == '__main__':
@@ -36,6 +37,7 @@ if __name__ == '__main__':
 
     # Find and interact with the login form elements
     login_button = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[@class='container']/div[2]/p/strong/a[@class='loginButton']")))
+
     login_button.click()
 
     user_name_field = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[@class='container']/div[@class='row']/div[@class='col-md-4']/div[@class='login-box']/form/div[@class='form-group'][1]/input[@id='username']")))

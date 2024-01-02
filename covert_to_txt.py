@@ -58,4 +58,4 @@ if __name__ == '__main__':
     src_dir = os.path.join(src_dir, 'Journals')
     # Replace 'output_folder' with the path where you want to save the text files
     print(src_dir)
-    nested_pdf_conversion(src_dir)
+    # nested_pdf_conversion(src_dir)
