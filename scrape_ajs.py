@@ -56,52 +56,55 @@ if __name__ == '__main__':
         select_years_copy.pop(3)
         for year in select_years_copy:
             year.click()
-
-
-        seconds = random.uniform(1, 2)
-        time.sleep(seconds)
-        select_volumes = wait.until(
-            EC.visibility_of_all_elements_located((By.XPATH, "//*[contains(@class, 'issue__cover-date')]")))
-        for item in select_volumes:
-            print(item.text)
-        time.sleep(200)
-
-        actions = ActionChains(driver)
-        actions.key_down(Keys.CONTROL).click(select_volumes[0]).key_up(Keys.CONTROL).perform()
-
-        driver.switch_to.window(driver.window_handles[-1])
-
-        pdf_buttons = wait.until((EC.presence_of_all_elements_located((By.XPATH, "//span[@class='issue-item__btn__label' "
-                                                                                 "and text()='PDF']"))))
-        seconds = random.uniform(1, 2)
-        time.sleep(seconds)
-        # now the webpage displays the collection of journals of an individual volume. Click on the pdf buttons for
-        # each journal, download from the proceeding download page, come back, and continue with the next journal
-        for pdf_button in pdf_buttons:
-            actions.key_down(Keys.CONTROL).click(pdf_button).key_up(Keys.CONTROL).perform()
-            driver.switch_to.window(driver.window_handles[-1])
-            wait.until(EC.presence_of_element_located(
-                (By.XPATH, "//*[@class='drawerMenu dark slider skip-drawer submenu-visible']")))
-
-            download_button = wait.until(
-                EC.presence_of_element_located((By.XPATH, "//button[contains(@class, 'dropdown-trigger') "
-                                                          "and contains(@class, 'btn') and contains("
-                                                          "@class, 'btn--light') and contains(@class, "
-                                                          "'btn--cta_roundedColored')]")))
-            download_button.click()
             seconds = random.uniform(1, 2)
             time.sleep(seconds)
 
-            download_pdf_button = wait.until(EC.presence_of_element_located((By.XPATH, "//a[contains(@class, 'download "
-                                                                                       "list-button') and "
-                                                                                       "@data-download-files-key='pdf']")))
-            download_pdf_button.click()
-            time.sleep(5)
+        # click on each volume until we reach the ones published in 2016, which has '' in button.text
+        select_volumes = wait.until(
+            EC.presence_of_all_elements_located((By.XPATH, "//*[contains(@class, 'issue__cover-date')]")))
+        i = 0
+        while select_volumes[i].text != '':
+            actions = ActionChains(driver)
+            actions.key_down(Keys.CONTROL).click(select_volumes[i]).key_up(Keys.CONTROL).perform()
+
+            driver.switch_to.window(driver.window_handles[-1])
+
+            pdf_buttons = wait.until((EC.presence_of_all_elements_located((By.XPATH, "//span[@class='issue-item__btn__label' "
+                                                                                     "and text()='PDF']"))))
+            seconds = random.uniform(1, 2)
+            time.sleep(seconds)
+            # now the webpage displays the collection of journals of an individual volume. Click on the pdf buttons for
+            # each journal, download from the proceeding download page, come back, and continue with the next journal
+            for pdf_button in pdf_buttons:
+                actions.key_down(Keys.CONTROL).click(pdf_button).key_up(Keys.CONTROL).perform()
+                driver.switch_to.window(driver.window_handles[-1])
+                wait.until(EC.presence_of_element_located(
+                    (By.XPATH, "//*[@class='drawerMenu dark slider skip-drawer submenu-visible']")))
+
+                download_button = wait.until(
+                    EC.presence_of_element_located((By.XPATH, "//button[contains(@class, 'dropdown-trigger') "
+                                                              "and contains(@class, 'btn') and contains("
+                                                              "@class, 'btn--light') and contains(@class, "
+                                                              "'btn--cta_roundedColored')]")))
+                download_button.click()
+                seconds = random.uniform(1, 2)
+                time.sleep(seconds)
+
+                download_pdf_button = wait.until(EC.presence_of_element_located((By.XPATH, "//a[contains(@class, 'download "
+                                                                                           "list-button') and "
+                                                                                           "@data-download-files-key='pdf']")))
+                download_pdf_button.click()
+                time.sleep(5)
+                driver.close()
+                driver.switch_to.window(driver.window_handles[-1])
+
+            # keep track of how many volumes have been recorded and properly close the tab
+            with open("download_log.txt", "w") as f:
+                f.write(f"Volume {volume} is completed")
+            volume -= 1
             driver.close()
             driver.switch_to.window(driver.window_handles[-1])
-        with open("download_log.txt", "w") as f:
-            f.write(f"Volume {volume} is completed")
-        volume -= 1
+            i += 1
     except Exception as e:
         # Handle the exception
         print(f"An error occurred: {e}")
